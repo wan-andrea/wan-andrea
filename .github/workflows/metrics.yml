@@ -1,10 +1,10 @@
 name: Metrics
 on:
-  # Schedule daily updates
+  # Schedule updates (once every 24 hours)
   schedule: [{cron: "0 0 * * *"}]
-  # (Optional) Run workflow manually
+  # Allow manual trigger from Actions tab
   workflow_dispatch:
-  # (Optional) Run on every push on the master branch
+  # Run on pushes to main branch
   push: {branches: ["master", "main"]}
 
 jobs:
@@ -15,29 +15,31 @@ jobs:
     steps:
       - uses: lowlighter/metrics@latest
         with:
+          # Your GitHub token
           token: ${{ secrets.METRICS_TOKEN }}
-          
+
           # Options
-          user: wan-andrea
+          user: ${{ github.repository_owner }}
           template: classic
           base: header, activity, community, repositories, metadata
           config_timezone: America/New_York
           
-          # 1. Detailed Language Breakdown
+          # --- Plugin: Languages (Indepth Analysis) ---
           plugin_languages: yes
-          plugin_languages_ignored: >-
-            html, css, tex, less, dockerfile, makefile, qmake, lex, cmake, shell,
-            gnuplot
           plugin_languages_indepth: yes
           plugin_languages_details: lines, bytes-size
           plugin_languages_limit: 8
           plugin_languages_analysis_timeout: 15
-          
-          # 2. Isometric Commit Calendar
+          # Ignore common non-code files to keep stats clean
+          plugin_languages_ignored: >-
+            html, css, tex, less, dockerfile, makefile, qmake, lex, cmake, shell,
+            gnuplot, vue, jupyter notebook
+
+          # --- Plugin: Isometric Commit Calendar ---
           plugin_isocalendar: yes
           plugin_isocalendar_duration: half-year
-          
-          # 3. (Optional) "Cool" Extra: Lines of code changed
+
+          # --- Plugin: Lines of Code Changed ---
           plugin_lines: yes
           plugin_lines_history_limit: 1
           plugin_lines_repositories_limit: 4
