@@ -15,32 +15,35 @@ jobs:
     steps:
       - uses: lowlighter/metrics@latest
         with:
-          # Your GitHub token
           token: ${{ secrets.METRICS_TOKEN }}
-
-          # Options
           user: ${{ github.repository_owner }}
+          
+          # CHANGE 1: Use "large" display to prevent cutoff
+          config_display: large
+          
+          # Options
           template: classic
           base: header, activity, community, repositories, metadata
           config_timezone: America/New_York
           
-          # --- Plugin: Languages (Indepth Analysis) ---
+          # Plugin: Languages
           plugin_languages: yes
           plugin_languages_indepth: yes
           plugin_languages_details: lines, bytes-size
           plugin_languages_limit: 8
           plugin_languages_analysis_timeout: 15
-          # Ignore common non-code files to keep stats clean
           plugin_languages_ignored: >-
             html, css, tex, less, dockerfile, makefile, qmake, lex, cmake, shell,
             gnuplot, vue, jupyter notebook
 
-          # --- Plugin: Isometric Commit Calendar ---
+          # Plugin: Isometric Calendar
           plugin_isocalendar: yes
+          # CHANGE 2: Set to "half-year" if "full-year" is still too wide
           plugin_isocalendar_duration: half-year
 
-          # --- Plugin: Lines of Code Changed ---
+          # Plugin: Lines
           plugin_lines: yes
           plugin_lines_history_limit: 1
           plugin_lines_repositories_limit: 4
           plugin_lines_sections: base
+
